@@ -35,7 +35,7 @@ public class ReservationServiceImpl implements ReservationService {
         }
         ParkingLot parkingLot=optionalParkingLot.get();
 
-        List<Spot> spots= parkingLot.getSpots().stream()
+        List<Spot> spots= parkingLot.getSpotList().stream()
                 .sorted(Comparator.comparingInt(Spot ::getPricePerHour))
                 .collect(Collectors.toList());
 
@@ -44,17 +44,17 @@ public class ReservationServiceImpl implements ReservationService {
 
         for(Spot s:spots)
         {
-            if(!s.isOccupied() &&  s.getSpotType().equals(SpotType.TWO_WHEELER) && numberOfWheels<=2 )
+            if(!s.getOccupied() &&  s.getSpotType().equals(SpotType.TWO_WHEELER) && numberOfWheels<=2 )
             {
                 spot=s;
                 break;
             }
-            else if(!s.isOccupied() &&  s.getSpotType().equals(SpotType.FOUR_WHEELER) && numberOfWheels<=4)
+            else if(!s.getOccupied() &&  s.getSpotType().equals(SpotType.FOUR_WHEELER) && numberOfWheels<=4)
             {
                 spot=s;
                 break;
             }
-            else if (!s.isOccupied() &&  s.getSpotType().equals(SpotType.OTHERS) && numberOfWheels>4)
+            else if (!s.getOccupied() &&  s.getSpotType().equals(SpotType.OTHERS) && numberOfWheels>4)
             {
                 spot=s;
                 break;
@@ -75,7 +75,7 @@ public class ReservationServiceImpl implements ReservationService {
 
         //user
         User user=userRepository3.findById(userId).get();
-        user.getReservations().add(reservation);
+        user.getReservationList().add(reservation);
 
         userRepository3.save(user);
 
